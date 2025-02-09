@@ -14,7 +14,7 @@ product = event_payload.get('ProductName')
 
 
 api_key = os.environ.get('API_KEY')
-metric_id = "METRIC_ID"
+metric_id = os.environ.get('METRIC_ID')
 
 
 def get_klaviyo_metric(api_key, metric_id, profile_id):
