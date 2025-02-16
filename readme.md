@@ -1,8 +1,8 @@
-# Multiple Product View Event Generator Script
+# Viewed Product Multiple Time Generator Script
 
 ## Overview
 
-This script is triggered by the Viewed Product events and uses the Klaviyo Get Event API to check how many times a specific product has been viewed. If the product has been viewed multiple times, it triggers a new event called "Viewed Event Multiple Times" using Klaviyo's Create Event API.
+This script is triggered by the Viewed Product events and uses the Klaviyo Get Event API to check how many times a specific product has been viewed. If the product has been viewed multiple times, it triggers a new event called "Viewed Event Multiple Times" using Klaviyo's Create Event API. This allows Klaviyo users to trigger Abandoned Cart flows only if a customer has viewed a specific product more than one time and help them target customer with more relevant content.
 
 ## Prerequisites
 
