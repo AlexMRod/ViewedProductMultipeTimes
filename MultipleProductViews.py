@@ -95,8 +95,7 @@ def create_klaviyo_event(api_key, profile_id):
                 "id": profile_id
               }
             }
-          },
-          "value": 19.98
+          }
         }
       }
     }
