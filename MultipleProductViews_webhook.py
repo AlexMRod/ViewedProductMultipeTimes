@@ -1,5 +1,4 @@
 from napkin import requests, response, request
-import requests
 import json
 import os
 import datetime
@@ -24,8 +23,7 @@ def get_klaviyo_metric(api_key, metric_id, profile_id):
 
 
     url = (
-        f"https://a.klaviyo.com/api/events?filter=equals(metric_id,\"{metric_id}\"),
-        equals(profile_id,\"{profile_id}\"),greater-or-equal(datetime,{date_filter_iso})"
+        f"https://a.klaviyo.com/api/events?filter=equals(metric_id,\"{metric_id}\"),equals(profile_id,\"{profile_id}\"),greater-or-equal(datetime,{date_filter_iso})"
     )
 
     headers = {
@@ -40,6 +38,8 @@ def get_klaviyo_metric(api_key, metric_id, profile_id):
         return response.json()
     else:
         raise Exception(f"Error {response.status_code}: {response.text}")
+
+print(api_key)
 
 metric_response = get_klaviyo_metric(api_key, metric_id, profile_id)
 
@@ -58,7 +58,7 @@ def create_klaviyo_event(api_key, profile_id):
     
     url = "https://a.klaviyo.com/api/events"
     headers = {
-        "Authorization": api_key,
+        "Authorization": f"Klaviyo-API-Key {api_key}",
         "Accept": "application/vnd.api+json",
         "Revision": "2024-10-15",
         "Content-Type": "application/vnd.api+json"
