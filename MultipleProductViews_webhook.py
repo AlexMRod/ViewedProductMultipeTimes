@@ -5,8 +5,8 @@ import os
 import datetime
 
 # Take incoming data and parse it as a JSON Object
-data_str = request.data #saves all data in a variable
-data = json.loads(data_str) #converts data to a JSON object
+data_str = request.data # saves all data in a variable
+data = json.loads(data_str) # converts data to a JSON object
 payload_str = data.get("payload") # saves event payload in a variable
 payload_str = payload_str.replace("'", "\"")# replace single quotes with double quotes
 event_payload = json.loads(payload_str) # stores payload JSON object in a variable
@@ -17,15 +17,15 @@ api_key = os.environ.get('API_KEY')
 metric_id = os.environ.get('METRIC_ID')
 
 def get_klaviyo_metric(api_key, metric_id, profile_id):
-  # Set date for URL filter
-    today = datetime.datetime.now(datetime.timezone.utc) 
-    date_month_ago = today - datetime.timedelta(days=30)
-    date_month_ago_iso = date_month_ago.isoformat()
-    
-  
+  # Set date for date URL filter (7 days)
+    today = datetime.datetime.now(datetime.timezone.utc)
+    date_filter = today - datetime.timedelta(days=7)
+    date_filter_iso = date_filter.isoformat()
+
+
     url = (
         f"https://a.klaviyo.com/api/events?filter=equals(metric_id,\"{metric_id}\"),
-        equals(profile_id,\"{profile_id}\"),greater-or-equal(datetime,{date_month_ago_iso})"
+        equals(profile_id,\"{profile_id}\"),greater-or-equal(datetime,{date_filter_iso})"
     )
 
     headers = {
@@ -83,14 +83,7 @@ def create_klaviyo_event(api_key, profile_id):
               "attributes": {
                 "properties": {},
                 "meta": {
-                  "patch_properties": {
-                    "append": {
-                      "newKey": "New Value"
-                    },
-                    "unappend": {
-                      "newKey": "New Value"
-                    }
-                  }
+                  "patch_properties": {}
                 },
                 "id": profile_id
               }
@@ -109,5 +102,5 @@ def create_klaviyo_event(api_key, profile_id):
         raise Exception(f"Error {response.status_code}: {response.text}")
 
 
-if count >= 2:
+if count >= 3:
     create_klaviyo_event(api_key, profile_id)
