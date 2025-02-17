@@ -6,11 +6,14 @@ This script is triggered by the Viewed Product events and uses the Klaviyo Get E
 
 ## Prerequisites
 
-1. **Create an account on Napkin.io**:  
-   This solution requires a middleware like Napkin.io to receive data from Klaviyo and process it.
-   
-2. **Environment Variables**:  
-   Set up your Klaviyo Private API key and the Viewed Product metric ID as environment variables in Napkin.io. For more details, see [Python Environment Variables](https://docs.napkin.io/python/environment-variables).
+1. **A Klaviyo Account with Flow Custom Actions**:
+See [Add a custom action to a flow](https://developers.klaviyo.com/en/docs/add_a_custom_action_to_a_flow) for elegiblity and documentation.
+2. **If not elegible for Custom Actions, open a free account on [Napikin.io](https://napkin.io)**: An Alternative solution requires a middleware like Napkin.io to receive data from Klaviyo and process it.
+3. **Set up your Klaviyo Private API key and the Viewed Product metric ID as environment variables**. For more details, see [Custom Actions - Environmentable Variables](https://developers.klaviyo.com/en/docs/add_a_custom_action_to_a_flow#environment-variables) or [Python Environment Variables - Napkin.io](https://docs.napkin.io/python/environment-variables).
+
+## NOTE
+
+Use **MultipleProductViews_CustomAction.py** if using Custom Actions and **Multiple Product Views_webhook.py** from implementation through Napkin.io
 
 ## How It Works
 
@@ -23,9 +26,7 @@ The script expects incoming data in JSON format. It parses the data to extract t
 
 ### Step 2: Fetch Event Data from Klaviyo
 
-The script uses the `profile_id` and `metric_id` in the `get_event_data` function to query the Klaviyo API. The request is sent to the following endpoint: [https://a.klaviyo.com/api/events?filter=equals(metric_id,"{metric_id}"),equals(profile_id,"{profile_id}"]
-
-This returns the events related to the specified `profile_id` and `metric_id`.
+The script uses the `profile_id` and `metric_id` in the `get_event_data` function to query the Klaviyo API. A variable called `date_filter_iso` is used to limit the response to a specific timeframe.
 
 ### Step 3: Count Views
 
@@ -33,7 +34,7 @@ The script counts how many times the specified product has been viewed by checki
 
 ### Step 4: Trigger New Event
 
-If the product has been viewed more than once, the script triggers a new event in Klaviyo using the `create_klaviyo_event` function. The new event includes the following details:
+If the product has been viewed more than 3 times, the script triggers a new event in Klaviyo using the `create_klaviyo_event` function. The new event includes the following details:
 
 - **Metric Name**: "Viewed Product Multiple Times"
 - **Profile ID**: The profile ID of the user who viewed the product.
@@ -43,14 +44,14 @@ If the product has been viewed more than once, the script triggers a new event i
 
 ### 1. Adjust Event Tracking
 
-To track different events or products, simply change the `metric_id` or the product name in the script. For example:
+To track different events or event properties, simply change the `metric_id` or the `product` variables in the script. For example:
 
 - Update the `metric_id` to track different event types. This script was originally written for the Viewed Product event but can be adapted to track other events like Order Product.
-- You can also add filters to the URL endpoint in the `get_klaviyo_metric` function. For more information, check out [Get Events API](https://developers.klaviyo.com/en/reference/get_events).
+- You can also include additional filters to the URL endpoint in the `get_klaviyo_metric` function. For more information, check out [Get Events API](https://developers.klaviyo.com/en/reference/get_events).
 
 ### 2. Modify Event Trigger Conditions
 
-The script is currently set to trigger the new event if the product is viewed more than once (`count >= 2`). You can modify this threshold to suit your requirements:
+The script is currently set to trigger the new event if the product is viewed more than once (`count >= 3`). You can modify this threshold to suit your requirements:
 
 ```python
 if count >= YOUR_THRESHOLD:
@@ -60,9 +61,11 @@ if count >= YOUR_THRESHOLD:
 ## Implementing the solution
 
 1. In your Klaviyo account, set up a Flow triggered by the Viewed Product event.
-2. Add a [Flow Webhook Action](https://developers.klaviyo.com/en/docs/how_to_add_a_webhook_action_to_a_flow).
-3. Enter the URL provided by napkin as the webhook endpoint.
-4. Enter the following payload in JSON Body:
+2. If using Custom Actions, set up the Custom Action following our documentation and include the script in MultipleProcutViews_CustomAction.py (skip to step 6)
+3. If you are using napkin.io, add a [Flow Webhook Action](https://developers.klaviyo.com/en/docs/how_to_add_a_webhook_action_to_a_flow).
+4. In Napkin.io, [create a new function](https://docs.napkin.io/guides/quick-start), add the script in MultipleProductViews_webhook.py and deploy the function.
+5. Enter the function URL provided by napkin as the webhook endpoint.
+6. Enter the following payload in JSON Body:
 
 ```json
 {
@@ -71,4 +74,4 @@ if count >= YOUR_THRESHOLD:
 }
 ```
 
-5. Create a a Browse Abandonment Flow triggered off the new Viewed Product Multiple times event and use the same logic you would use in your standard Browse Abandonment event.
+7. Create a a Browse Abandonment Flow triggered off the new Viewed Product Multiple times event and use the same logic you would use in your standard Browse Abandonment event.
