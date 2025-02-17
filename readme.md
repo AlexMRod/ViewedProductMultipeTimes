@@ -8,12 +8,12 @@ This script is triggered by the Viewed Product events and uses the Klaviyo Get E
 
 1. **A Klaviyo Account with Flow Custom Actions**:
 See [Add a custom action to a flow](https://developers.klaviyo.com/en/docs/add_a_custom_action_to_a_flow) for elegiblity and documentation.
-2. **If not elegible for Custom Actions, open a free account on [Napikin.io](https://napkin.io)**: An Alternative solution requires a middleware like Napkin.io to receive data from Klaviyo and process it.
+2. **If not elegible for Custom Actions, open a free account on [Napkin.io](https://napkin.io)**: This alternative solution requires a middleware like Napkin.io to receive data from Klaviyo and process it.
 3. **Set up your Klaviyo Private API key and the Viewed Product metric ID as environment variables**. For more details, see [Custom Actions - Environmentable Variables](https://developers.klaviyo.com/en/docs/add_a_custom_action_to_a_flow#environment-variables) or [Python Environment Variables - Napkin.io](https://docs.napkin.io/python/environment-variables).
 
 ## NOTE
 
-Use **MultipleProductViews_CustomAction.py** if using Custom Actions and **Multiple Product Views_webhook.py** from implementation through Napkin.io
+Use **MultipleProductViews_CustomAction.py** if using Custom Actions and **Multiple Product Views_webhook.py** for implementation through Napkin.io
 
 ## How It Works
 
@@ -30,7 +30,7 @@ The script uses the `profile_id` and `metric_id` in the `get_event_data` functio
 
 ### Step 3: Count Views
 
-The script counts how many times the specified product has been viewed by checking the event data. If the product has been viewed at least once, the script increments the count.
+The script counts how many times the specified product has been viewed by checking the event data. If the product has been viewed multiple times, the script increments the count.
 
 ### Step 4: Trigger New Event
 
@@ -61,10 +61,10 @@ if count >= YOUR_THRESHOLD:
 ## Implementing the solution
 
 1. In your Klaviyo account, set up a Flow triggered by the Viewed Product event.
-2. If using Custom Actions, set up the Custom Action following our documentation and include the script in MultipleProcutViews_CustomAction.py (skip to step 6)
+2. If using Custom Actions, set up the Custom Action following our documentation and include the script in MultipleProcutViews_CustomAction.py (skip to step 7)
 3. If you are using napkin.io, add a [Flow Webhook Action](https://developers.klaviyo.com/en/docs/how_to_add_a_webhook_action_to_a_flow).
 4. In Napkin.io, [create a new function](https://docs.napkin.io/guides/quick-start), add the script in MultipleProductViews_webhook.py and deploy the function.
-5. Enter the function URL provided by napkin as the webhook endpoint.
+5. Enter the function URL provided by Napkin.io as the Flow Webhook endpoint.
 6. Enter the following payload in JSON Body:
 
 ```json
