@@ -56,7 +56,7 @@ def handler(event, profile, context):
             "data": {
                 "type": "event",
                 "attributes": {
-                    "properties": event_payload,
+                    "properties": event_properties,
                     "metric": {
                         "data": {
                             "type": "metric",
