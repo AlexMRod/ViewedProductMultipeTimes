@@ -41,7 +41,7 @@ def handler(event, profile, context):
             print('item not added')
 
     print(count)
-    event_payload = {'Times Seen': count}
+    event_properties['Times Seen'] =  count
 
     def create_klaviyo_event(api_key, profile_id):
         url = "https://a.klaviyo.com/api/events"
